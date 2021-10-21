@@ -44,6 +44,7 @@
 #define SOURCE_CY_TIME_MISC_H_
 
 #include <stdbool.h>
+#include "feature_config.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -59,8 +60,10 @@ long elapsed_time_in_msec(long previous_time);
 
 void msleep(long msec);
 
+#if (FEATURE_PLATFORM_TIME == ENABLE_FEATURE)
 #include "mbedtls/platform_time.h"  /* for mbedtls_time_t */
 extern mbedtls_time_t get_current_time(mbedtls_time_t *t);  /* implemented in cy_tls.c */
+#endif
 
 #ifdef __cplusplus
 }
