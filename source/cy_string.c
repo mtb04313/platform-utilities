@@ -96,3 +96,65 @@ char *cy_strdup(const char *text_p)
     }
     return dup_p;
 }
+
+char* remove_left_char(char* input_text_p, char matching_char)
+{
+  char* temp = NULL;
+  if (input_text_p != NULL) {
+    temp = input_text_p;
+
+    while ((*temp != '\0') && (*temp == matching_char)) {
+      temp++;
+    }
+  }
+  return temp;
+}
+
+// remove trailing char
+// Note: function will modify input_text_p
+char* remove_right_char(char* input_text_p, char matching_char)
+{
+  char* temp = NULL;
+
+  if (input_text_p != NULL) {
+    size_t len = strlen(input_text_p);
+    if (len > 0) {
+      temp = &input_text_p[len - 1];
+
+      while (*temp == matching_char) {
+        *temp = '\0';
+        temp--;
+        if (temp == input_text_p)
+          break;
+      }
+    }
+    temp = input_text_p;
+  }
+  return temp;
+}
+
+// Note: function will modify quoted_text_p
+char* remove_quotes(char* quoted_text_p)
+{
+  return remove_matching_char(quoted_text_p, '\"');
+}
+
+// Note: function will modify input_text_p
+char* remove_matching_char(char* input_text_p, char matching_char)
+{
+  char* result;
+
+  result = remove_left_char(input_text_p, matching_char);
+  return remove_right_char(result, matching_char);
+}
+
+// Note: function will modify input_text_p
+char* remove_crlf(char* input_text_p)
+{
+  char* result;
+
+  result = remove_left_char(input_text_p, '\r');
+  result = remove_left_char(result, '\n');
+  result = remove_right_char(result, '\n');
+  return remove_right_char(result, '\r');
+}

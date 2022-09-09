@@ -72,6 +72,16 @@ char* right_trim(char* text_p); // Note: function will modify text_p
 
 char *cy_strdup(const char *text_p);
 
+char* remove_left_char(char* input_text_p, char matching_char);
+
+char* remove_right_char(char* input_text_p, char matching_char); // Note: function will modify input_text_p
+
+char* remove_matching_char(char* input_text_p, char matching_char); // Note: function will modify input_text_p
+
+char* remove_quotes(char* quoted_text_p); // Note: function will modify quoted_text_p
+
+char* remove_crlf(char* input_text_p); // Note: function will modify input_text_p
+
 #ifdef __cplusplus
 }
 #endif
