@@ -238,7 +238,7 @@ bool cy_sntp_handle_timezone_change( float previous_diff,
   rtcTime.hour = tm_p->tm_hour;
   rtcTime.amPm = CY_RTC_AM;
   rtcTime.hrFormat = CY_RTC_24_HOURS;
-  rtcTime.dayOfWeek = tm_p->tm_wday + 1;
+  rtcTime.dayOfWeek = CY_RTC_DAY_AUTO; //tm_p->tm_wday + 1;
   rtcTime.date = tm_p->tm_mday;
   rtcTime.month = tm_p->tm_mon + 1;
   rtcTime.year = tm_p->tm_year - 121; // tm_year is 121 for year 2021
