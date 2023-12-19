@@ -69,6 +69,7 @@
 /* Number of seconds between 1970 and Feb 7, 2036 06:28:16 UTC (epoch 1) */
 #define DIFF_SEC_1970_2036          ((uint32_t)2085978496L)
 
+#define COMPACT_DATETIME_LEN        12
 
 /*-- Local Data -------------------------------------------------*/
 
@@ -79,6 +80,12 @@ static bool s_sntp_updated = false;
 
 static void initialize_sntp(void)
 {
+  // Force cy_time.c (in mtb_shared/clib_support) to create the RTC instance first,
+  // which involves a RTC reset.
+  // Then cy_sntp_set_system_time_callback() can set the RTC
+  time_t time_now = time(NULL);
+  DEBUG_PRINT(("time_now = %ld\n", (long)time_now));
+
   sntp_setoperatingmode(SNTP_OPMODE_POLL);
   sntp_setservername(0, "pool.ntp.org");
 
@@ -269,7 +276,6 @@ void cy_sntp_get_current_time( char *buf,
   tm.tm_wday = now.dayOfWeek - 1;
   tm.tm_year = now.year + 2021 - 1900;
 
-  //strftime (s_timeStr, sizeof(s_timeStr), "%a %b %d, %Y, %I:%M:%S %p", &tm);
   strftime (buf, buf_size, format_specifier, &tm);
 }
 
@@ -300,6 +306,20 @@ void cy_sntp_get_current_date_short( char *buf,
                                      size_t buf_size)
 {
   cy_sntp_get_current_time(buf, buf_size, "%a %d %b");
+}
+
+// e.g. 210617170727
+void cy_sntp_get_current_date_compact(char *buf,
+                                      size_t buf_size)
+{
+  cy_sntp_get_current_time(buf, buf_size, "%y%m%d%H%M%S");
+}
+
+void cy_sntp_print_timestamp(const char* text_p, int line)
+{
+  char compactDateTime[COMPACT_DATETIME_LEN + 1] = "";
+  cy_sntp_get_current_date_compact(compactDateTime, sizeof(compactDateTime));
+  DEBUG_PRINT(("%s [%d] compactDateTime = %s\n", text_p, line, compactDateTime));
 }
 
 /* [] END OF FILE */

@@ -85,6 +85,11 @@ void cy_sntp_get_current_time_long(char *buf,
 void cy_sntp_get_current_date_short( char *buf,
                                      size_t buf_size);
 
+void cy_sntp_get_current_date_compact(char *buf,
+                                      size_t buf_size);
+
+void cy_sntp_print_timestamp(const char* text_p, int line);
+
 #ifdef __cplusplus
 }
 #endif
