@@ -39,6 +39,8 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+#if defined(CY_RTOS_AWARE)
+
 #include <string.h>
 #include "cy_notification.h"
 
@@ -113,5 +115,7 @@ cy_rslt_t cy_notification_set(cy_notification_t *notification,
 
     return cy_rtos_set_semaphore(&notification->sem, in_isr);
 }
+
+#endif
 
 /* [] END OF FILE */

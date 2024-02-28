@@ -40,24 +40,57 @@
 *******************************************************************************/
 
 #include "cy_time_misc.h"
-#include <cyabs_rtos.h>
 
+#if defined(CY_RTOS_AWARE)
+#include <cyabs_rtos.h>
+#else
+#include <cy_systick.h>
+#include <cy_syslib.h>
+#endif
+
+
+/*-- Local Functions -------------------------------------------------*/
+
+#if !defined(CY_RTOS_AWARE)
+static uint32_t s_tick = 0;
+
+static void systick_isr(void)
+{
+  s_tick++;
+}
+#endif
 
 /*-- Public Functions -------------------------------------------------*/
 
 long current_time(void)
 {
+#if defined(CY_RTOS_AWARE)
     cy_time_t tval = 0;
-    if (cy_rtos_get_time(&tval) == CY_RSLT_SUCCESS) {
+    if (cy_rtos_get_time(&tval) == CY_RSLT_SUCCESS)
         return (long)tval;
+
+#else
+    static int s_initialized = 0;
+    if (!s_initialized) {
+        Cy_SysTick_Init(CY_SYSTICK_CLOCK_SOURCE_CLK_IMO, (8000000/1000)-1);
+        Cy_SysTick_SetCallback(0, systick_isr);
+        s_initialized = 1;
     }
+
+    return s_tick; //(long)Cy_SysTick_GetValue();
+#endif
 
     return 0;
 }
 
 void msleep(long msec)
 {
+#if defined(CY_RTOS_AWARE)
     cy_rtos_delay_milliseconds((uint32_t)msec);
+
+#else
+    Cy_SysLib_Delay(msec);
+#endif
 }
 
 long elapsed_time_in_msec(long previous_time)

@@ -50,6 +50,8 @@
  * Header file includes
  ******************************************************************************/
 #include <stdint.h>
+
+#if defined(CY_RTOS_AWARE)
 #include "cyabs_rtos.h"
 
 #ifdef __cplusplus
@@ -83,6 +85,8 @@ cy_rslt_t cy_notification_set(cy_notification_t *notification,
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif // SOURCE_CY_NOTIFICATION_H_

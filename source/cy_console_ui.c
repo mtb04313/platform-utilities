@@ -43,10 +43,10 @@
 #include <stdint.h>
 #include <ctype.h>
 
-#include "cyabs_rtos.h"
 #include "cy_console_ui.h"
 #include "cy_conio.h"
 #include "cy_debug.h"
+#include "cy_time_misc.h"
 
 #define USER_CONFIRMATION_INTERVAL_MSEC     1000
 
@@ -101,7 +101,8 @@ bool get_user_confirmation_with_timeout(bool default_answer, int timeout_sec)
         }
 
         stamp--;
-        cy_rtos_delay_milliseconds(USER_CONFIRMATION_INTERVAL_MSEC);
+
+        msleep(USER_CONFIRMATION_INTERVAL_MSEC);
     }
 
     return result;

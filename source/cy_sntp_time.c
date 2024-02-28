@@ -40,6 +40,8 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+#if defined(CY_RTOS_AWARE)
+
 #include <stdio.h>
 #include <string.h>
 
@@ -321,5 +323,7 @@ void cy_sntp_print_timestamp(const char* text_p, int line)
   cy_sntp_get_current_date_compact(compactDateTime, sizeof(compactDateTime));
   DEBUG_PRINT(("%s [%d] compactDateTime = %s\n", text_p, line, compactDateTime));
 }
+
+#endif
 
 /* [] END OF FILE */

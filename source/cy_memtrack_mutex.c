@@ -45,7 +45,10 @@
 
 #include "cy_memtrack_mutex.h"
 #include "cy_debug.h"
+
+#if defined(CY_RTOS_AWARE)
 #include "cyabs_rtos.h"
+#endif
 
 #define USE_ABSTRACTION_RTOS        0   // 1:enable, 0:disable
 

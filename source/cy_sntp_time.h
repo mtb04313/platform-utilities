@@ -56,6 +56,8 @@ extern "C"
 {
 #endif
 
+#if defined(CY_RTOS_AWARE)
+
 /*******************************************************************************
  * Function Prototypes
  ******************************************************************************/
@@ -89,6 +91,8 @@ void cy_sntp_get_current_date_compact(char *buf,
                                       size_t buf_size);
 
 void cy_sntp_print_timestamp(const char* text_p, int line);
+
+#endif
 
 #ifdef __cplusplus
 }
