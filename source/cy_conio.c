@@ -43,13 +43,21 @@
 /*******************************************************************************
  * Header file includes
  ******************************************************************************/
+#include "cy_conio_config.h"    // defines USE_CY_RETARGET_IO_HAL value
 #include "cy_conio.h"
 #include "cy_debug.h"
-#include "cy_pdl.h"
-#include "cyhal.h"
 
-/* UART HAL object used by Retarget-IO for Debug UART port */
-extern cyhal_uart_t cy_retarget_io_uart_obj;
+#if USE_CY_RETARGET_IO_HAL
+    // use retarget_io HAL
+    #include "cyhal.h"
+
+    /* UART HAL object used by Retarget-IO for Debug UART port */
+    extern cyhal_uart_t cy_retarget_io_uart_obj;
+
+#else
+    // use retarget_io PDL
+    #include "cycfg_peripherals.h"
+#endif
 
 
 /*******************************************************************************
@@ -58,7 +66,8 @@ extern cyhal_uart_t cy_retarget_io_uart_obj;
 
 uint8_t get_key(void)
 {
-    uint8_t uart_read_value;
+#if USE_CY_RETARGET_IO_HAL
+    uint8_t uart_read_value = 0;
 
     if (cyhal_uart_getc(&cy_retarget_io_uart_obj, &uart_read_value, 1)
             == CY_RSLT_SUCCESS) {
@@ -66,6 +75,17 @@ uint8_t get_key(void)
     }
 
     return 0;
+
+#else
+    uint32_t read_value = Cy_SCB_UART_Get(CYBSP_UART_HW);
+
+    while (read_value == CY_SCB_UART_RX_NO_DATA) {
+        read_value = Cy_SCB_UART_Get(CYBSP_UART_HW);
+    }
+
+    return (uint8_t)read_value;
+
+#endif
 }
 
 
